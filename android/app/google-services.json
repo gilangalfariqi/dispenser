@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "915303182974",
+    "firebase_url": "https://dispenser-56c3f-default-rtdb.firebaseio.com",
+    "project_id": "dispenser-56c3f",
+    "storage_bucket": "dispenser-56c3f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:915303182974:android:49c2879b85ac277c86de2f",
+        "android_client_info": {
+          "package_name": "com.example.dispenser"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA3fac8eV3lspf9o05EOC6E4CbilOnNDJM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
