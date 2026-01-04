@@ -1,38 +1,44 @@
+// lib/models/sensor_data.dart
 class SensorData {
   final double waterHeight;
   final double galonPct;
   final double temperature;
-  final double volume;
-  final String status;
-  final int progress;
-  final String color;
-  final String message;
-  final int timestamp;        // ➜ tambahkan
-  final String glassStatus;   // ➜ tambahkan
+  final int volume;
+  final String glassStatus;
+  final int timestamp;
 
-  const SensorData({
-    this.waterHeight = 0,
-    this.galonPct = 0,
-    this.temperature = 0,
-    this.volume = 0,
-    this.status = 'idle',
-    this.progress = 0,
-    this.color = 'green',
-    this.message = '',
-    this.timestamp = 0,        // ➜ tambahkan
-    this.glassStatus = 'idle', // ➜ tambahkan
+  SensorData({
+    required this.waterHeight,
+    required this.galonPct,
+    required this.temperature,
+    required this.volume,
+    required this.glassStatus,
+    required this.timestamp,
   });
 
-  factory SensorData.fromJson(Map<String, dynamic> json) => SensorData(
-    waterHeight: (json['waterHeight'] ?? 0).toDouble(),
-    galonPct: (json['galonPct'] ?? 0).toDouble(),
-    temperature: (json['temperature'] ?? 0).toDouble(),
-    volume: (json['volume'] ?? 0).toDouble(),
-    status: json['status'] ?? 'idle',
-    progress: json['progress'] ?? 0,
-    color: json['color'] ?? 'green',
-    message: json['message'] ?? '',
-    timestamp: json['timestamp'] ?? 0,        // ➜ tambahkan
-    glassStatus: json['glassStatus'] ?? 'idle', // ➜ tambahkan
-  );
+  factory SensorData.fromJson(Map<dynamic, dynamic> json) {
+    return SensorData(
+      waterHeight: (json['waterHeight'] ?? 0).toDouble(),
+      galonPct: (json['galonLevel'] ?? 0).toDouble(),
+      temperature: (json['temperature'] ?? 0).toDouble(),
+      volume: (json['volume'] ?? 0).toInt(),
+      glassStatus: json['glassStatus'] ?? 'empty',
+      timestamp: json['timestamp'] ?? 0,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'waterHeight': waterHeight,
+      'galonLevel': galonPct,
+      'temperature': temperature,
+      'volume': volume,
+      'glassStatus': glassStatus,
+      'timestamp': timestamp,
+    };
+  }
+
+  bool get isLowWater => galonPct < 20;
+  bool get isCriticalWater => galonPct < 10;
+  bool get isFilling => glassStatus.toLowerCase() == 'filling';
 }

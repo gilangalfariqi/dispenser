@@ -1,21 +1,35 @@
+// lib/widgets/animated_background.dart
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 
 class AnimatedBackground extends StatelessWidget {
   final Widget child;
-  const AnimatedBackground({super.key, required this.child});
+
+  const AnimatedBackground({
+    super.key,
+    required this.child,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [Color(0xFF6DD5FA), Color(0xFF2193b0)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
+          colors: isDark
+              ? [
+            const Color(0xFF0A0E21),
+            const Color(0xFF1D1E33),
+          ]
+              : [
+            const Color(0xFFF5F7FA),
+            const Color(0xFFE8EAF6),
+          ],
         ),
       ),
       child: child,
-    ).animate().fadeIn(duration: 800.ms);
+    );
   }
 }

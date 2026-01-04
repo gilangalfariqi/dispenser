@@ -1,45 +1,72 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter_animate/flutter_animate.dart';
-import '../models/sensor_data.dart';
+import 'package:iot_dispenser/models/sensor_data.dart';
 
-class SensorChart extends StatelessWidget {
+class SensorChart extends StatefulWidget {
   final SensorData data;
   const SensorChart({super.key, required this.data});
 
   @override
+  State<SensorChart> createState() => _SensorChartState();
+}
+
+class _SensorChartState extends State<SensorChart> with TickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 800),
+      vsync: this,
+    );
+    _animation = CurvedAnimation(parent: _controller, curve: Curves.easeOut);
+    _controller.forward();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      elevation: 6,
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: LineChart(
+    return AnimatedBuilder(
+      animation: _animation,
+      builder: (context, child) {
+        return LineChart(
           LineChartData(
+            gridData: const FlGridData(show: true),
+            titlesData: const FlTitlesData(
+              show: true,
+              bottomTitles: AxisTitles(
+                sideTitles: SideTitles(showTitles: true, reservedSize: 30),
+              ),
+              leftTitles: AxisTitles(
+                sideTitles: SideTitles(showTitles: true, reservedSize: 40),
+              ),
+            ),
+            borderData: FlBorderData(show: true),
             lineBarsData: [
               LineChartBarData(
                 spots: [
-                  FlSpot(0, data.temperature),
-                  FlSpot(1, data.waterHeight),
-                  FlSpot(2, data.galonPct),
+                  FlSpot(0, widget.data.temperature),
+                  FlSpot(1, 28.0),
+                  FlSpot(2, 27.5),
+                  FlSpot(3, widget.data.temperature),
                 ],
                 isCurved: true,
-                color: Colors.blueAccent,
-                barWidth: 5,
-                dotData: FlDotData(show: true),
-                belowBarData: BarAreaData(
-                  show: true,
-                  color: Colors.blue.withOpacity(0.2),
-                ),
+                color: Colors.blue,
+                barWidth: _animation.value * 3,
+                dotData: const FlDotData(show: true),
               ),
             ],
-            titlesData: FlTitlesData(show: false),
-            gridData: FlGridData(show: false),
-            borderData: FlBorderData(show: false),
+            backgroundColor: Colors.transparent,
           ),
-          duration: const Duration(milliseconds: 400),
-        ),
-      ),
-    ).animate().fadeIn(duration: 600.ms).slideY(begin: 0.2, end: 0);
+        );
+      },
+    );
   }
 }
